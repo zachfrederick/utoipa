@@ -1,13 +1,12 @@
-use std::{
-    env,
-    error::Error,
-    fs::{self, File},
-    io::{self, Cursor},
-    path::{Path, PathBuf},
-};
+use std::env;
+use std::error::Error;
+use std::fs::{self, File};
+use std::io::{self, Cursor};
+use std::path::{Path, PathBuf};
 
 use regex::Regex;
-use zip::{result::ZipError, ZipArchive};
+use zip::result::ZipError;
+use zip::ZipArchive;
 
 /// the following env variables control the build process:
 /// 1. SWAGGER_UI_DOWNLOAD_URL:
@@ -100,9 +99,9 @@ impl SwaggerZip {
 
         for index in 0..self.len() {
             let mut file = self.by_index(index)?;
-            let filepath = file
-                .enclosed_name()
-                .ok_or(ZipError::InvalidArchive("invalid path file".into()))?;
+            let filepath = file.enclosed_name().ok_or(ZipError::InvalidArchive(
+                std::borrow::Cow::Borrowed("invalid path file"),
+            ))?;
 
             if index == 0 {
                 zip_top_level_folder = filepath
